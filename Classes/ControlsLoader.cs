@@ -17,6 +17,7 @@ namespace openstig_api_controls.Classes {
             Control c;
             ChildControl cc;
             XmlDocument xmlDoc = new XmlDocument();
+            XmlNodeList statementList;
             // get the file path for the NIST control listing inside this area
             var ccipath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/800-53-controls.xml";
             if (File.Exists(ccipath)) {
@@ -33,13 +34,35 @@ namespace openstig_api_controls.Classes {
                             c.title = controlData.InnerText;
                         else if (controlData.Name == "priority")
                             c.priority = controlData.InnerText;
-                        else if (controlData.Name == "baseline-impact")
+                        else if (controlData.Name == "baseline-impact") {
                             if (controlData.InnerText == "LOW")
                                 c.lowimpact = true;
                             else if (controlData.InnerText == "MODERATE")
                                 c.moderateimpact = true;
                             else if (controlData.InnerText == "HIGH")
                                 c.highimpact = true;
+                        }
+                        else if (controlData.Name == "statement") {
+                            // get the subparts of this control
+                            statementList = controlData.GetElementsByTagName("statement");
+                            foreach (XmlElement statementChild in statementList) {
+                                cc = new ChildControl();
+                                // get all the sub controls listed
+                                foreach (XmlElement statementData in statementChild.ChildNodes) {
+                                    if (statementData.Name == "number")
+                                        cc.number = statementData.InnerText;
+                                    else if (statementData.Name == "description")
+                                        cc.description = statementData.InnerText;
+                                }
+                                c.childControls.Add(cc);
+                            }
+                        }
+                        else if (controlData.Name == "supplemental-guidance") {
+                            // get the description
+                            if (controlData.ChildNodes.Count > 0) {
+                                c.supplementalGuidance = controlData.ChildNodes[0].FirstChild.InnerText.Replace("\r","").Replace("\n", "");
+                            }
+                        }
                     }
                     controls.Add(c); // add to the main control
                 }
