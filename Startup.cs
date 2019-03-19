@@ -122,7 +122,7 @@ namespace openstig_api_controls
                     foreach (ChildControl cc in c.childControls) {
                         cs.id = Guid.NewGuid(); // need a new PK ID for each record saved
                         if (!string.IsNullOrEmpty(cc.description))
-                            cs.subControlDescription = cc.description.Replace("\\r","").Replace("\\n","");
+                            cs.subControlDescription = cc.description.Replace("\r","").Replace("\n","");
                         cs.subControlNumber = cc.number.Replace(" ", "").Replace(".",""); // remove periods and empty space for searching later
                         context.ControlSets.Add(cs); // for each sub control, do a save on the whole thing
                         Console.WriteLine("Adding number " + cs.subControlNumber);
