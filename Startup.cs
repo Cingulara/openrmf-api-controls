@@ -33,7 +33,7 @@ namespace openstig_api_controls
         {
             // Register the database components
             services.AddDbContext<ControlsDBContext>(context => 
-                {context.UseInMemoryDatabase("Controls"); });  
+                {context.UseInMemoryDatabase("ControlSet"); });  
             
             // Register the Swagger generator, defining one or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -105,8 +105,28 @@ namespace openstig_api_controls
         private void LoadControlsXML(ControlsDBContext context) {
             List<Control> controls = Classes.ControlsLoader.LoadControls();
             // for each one, load into the in-memory DB
+            ControlSet cs;
             foreach (Control c in controls) {
-                context.Controls.Add(c);
+                cs = new ControlSet(); // the flattened controls table listing for the in memory DB
+                cs.family = c.family;
+                cs.highimpact = c.highimpact;
+                cs.moderateimpact = c.moderateimpact;
+                cs.lowimpact = c.lowimpact;
+                cs.id = c.id;
+                cs.number = c.number;
+                cs.priority = c.priority;
+                cs.title = c.title;
+                cs.supplementalGuidance = c.supplementalGuidance;
+                if (c.childControls.Count > 0)
+                {
+                    foreach (ChildControl cc in c.childControls) {
+                        cs.subControlDescription = cc.description;
+                        cs.subControlNumber = cc.number;
+                        context.ControlSets.Add(cs); // for each sub control, do a save on the whole thing
+                    }
+                }
+                else
+                    context.ControlSets.Add(cs); // for some reason no sub controls
             }
             context.SaveChanges();
         }

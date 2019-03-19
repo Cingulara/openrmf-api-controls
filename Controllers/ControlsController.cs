@@ -37,14 +37,14 @@ namespace openstig_api_controls.Controllers
         public async Task<IActionResult> GetAllControls()
         {
             try {
-                var result = await _context.Controls.ToListAsync();
+                var result = await _context.ControlSets.ToListAsync();
                 if (result != null)
                     return Ok(result);
                 else
                     return NotFound(); // nothing loaded yet
             }
             catch (Exception ex) {
-                _logger.LogError(ex, "Error listing all controls...check the in memory database and XML file load.");
+                _logger.LogError(ex, "Error listing all control sets. Please check the in memory database and XML file load.");
                 return BadRequest();
             }
         }
