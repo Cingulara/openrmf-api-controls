@@ -53,17 +53,22 @@ namespace openstig_api_controls.Controllers
         [HttpGet("{term}")]
         public async Task<IActionResult> GetControl(string term)
         {
-            try {
-                var result = await _context.ControlSets.Where(x => x.subControlNumber == term).ToListAsync();
-                if (result != null)
-                    return Ok(result);
-                else
-                    return NotFound(); // nothing loaded yet
+            if (!string.IsNullOrEmpty(term)) {
+                try {
+                    term = term.Replace(" ", "").Replace(".",""); // get rid of things we do not need
+                    var result = await _context.ControlSets.Where(x => x.subControlNumber == term || x.number == term).ToListAsync();
+                    if (result != null && result.Count > 0)
+                        return Ok(result);
+                    else 
+                        return NotFound(); // nothing loaded yet
+                }
+                catch (Exception ex) {
+                    _logger.LogError(ex, "Error listing all control sets. Please check the in memory database and XML file load.");
+                    return BadRequest();
+                }
             }
-            catch (Exception ex) {
-                _logger.LogError(ex, "Error listing all control sets. Please check the in memory database and XML file load.");
-                return BadRequest();
-            }
+            else
+                return NotFound();
         }
 
     }

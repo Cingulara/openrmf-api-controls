@@ -112,7 +112,6 @@ namespace openstig_api_controls
                 cs.highimpact = c.highimpact;
                 cs.moderateimpact = c.moderateimpact;
                 cs.lowimpact = c.lowimpact;
-                cs.id = c.id;
                 cs.number = c.number;
                 cs.priority = c.priority;
                 cs.title = c.title;
@@ -120,13 +119,19 @@ namespace openstig_api_controls
                 if (c.childControls.Count > 0)
                 {
                     foreach (ChildControl cc in c.childControls) {
+                        cs.id = Guid.NewGuid(); // need a new PK ID for each record saved
                         cs.subControlDescription = cc.description;
                         cs.subControlNumber = cc.number.Replace(" ", "").Replace(".",""); // remove periods and empty space for searching later
                         context.ControlSets.Add(cs); // for each sub control, do a save on the whole thing
+                        Console.WriteLine("Adding number " + cs.subControlNumber);
+                        context.SaveChanges();
                     }
                 }
-                else
+                else {
+                    cs.id = Guid.NewGuid();
                     context.ControlSets.Add(cs); // for some reason no sub controls
+                    context.SaveChanges();
+                }
             }
             context.SaveChanges();
         }
