@@ -79,30 +79,9 @@ namespace openstig_api_controls
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                var context = serviceScope.ServiceProvider.GetService<ControlsDBContext>();
-                // Seed the database.
-                Control c = new Control();
-                c.family = "ACCESS CONTROL";
-                c.number = "AC-1";
-                c.title = "ACCESS CONTROL POLICY AND PROCEDURES";
-                c.priority = "P1";
-                c.lowimpact = true;
-                c.moderateimpact = true;
-                c.highimpact = true;
-
-                ChildControl cc = new ChildControl();
-                cc.number = "AC-1a";
-                cc.description = "Develops, documents, and disseminates to [Assignment: organization-defined personnel or roles]";
-                c.childControls.Add(cc);
-                cc.number = "AC-1a1";
-                cc.description = "An access control policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance";
-                c.childControls.Add(cc);
-                // save it
-                context.Controls.Add(c);
-                context.SaveChanges();
+                LoadControlsXML(serviceScope.ServiceProvider.GetService<ControlsDBContext>());
             }
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
@@ -123,5 +102,13 @@ namespace openstig_api_controls
             app.UseMvc();
         }
 
+        private void LoadControlsXML(ControlsDBContext context) {
+            List<Control> controls = Classes.ControlsLoader.LoadControls();
+            // for each one, load into the in-memory DB
+            foreach (Control c in controls) {
+                context.Controls.Add(c);
+            }
+            context.SaveChanges();
+        }
     }
 }

@@ -3,4 +3,4 @@ This is the openSTIG Controls API that references [this](https://nvd.nist.gov/80
 can match the CCI to NIST XML from DISA.
 
 ## Making your local Docker image
-docker build --rm -t openstig-api-controls:0.5 .
+make docker

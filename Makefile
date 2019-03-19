@@ -1,8 +1,8 @@
 VERSION ?= 0.5
 NAME ?= "openstig-api-controls"
 AUTHOR ?= "Dale Bingham"
-PORT_EXT ?= 8092
-PORT_INT ?= 8092
+PORT_EXT ?= 8094
+PORT_INT ?= 8094
 NO_CACHE ?= true
 DOCKERHUB_ACCOUNT ?= cingulara
   
