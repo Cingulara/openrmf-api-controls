@@ -10,6 +10,8 @@ namespace openstig_api_controls.Models
     public ControlSet () {
       id = Guid.NewGuid(); // pk generated
     }
+    [Key]
+    public Guid id { get; set;}
     public string family { get; set;}
     public string number { get; set;}
     public string title { get; set;}
@@ -18,9 +20,6 @@ namespace openstig_api_controls.Models
     public bool moderateimpact { get; set;}
     public bool highimpact { get; set;}
     public string supplementalGuidance { get; set;}
-    public List<ChildControl> childControls { get; set; }
-    [Key]
-    public Guid id { get; set;}
 
     public string subControlDescription { get; set;}
     public string subControlNumber { get; set;}

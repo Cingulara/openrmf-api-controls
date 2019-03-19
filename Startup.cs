@@ -121,7 +121,7 @@ namespace openstig_api_controls
                 {
                     foreach (ChildControl cc in c.childControls) {
                         cs.subControlDescription = cc.description;
-                        cs.subControlNumber = cc.number;
+                        cs.subControlNumber = cc.number.Replace(" ", "").Replace(".",""); // remove periods and empty space for searching later
                         context.ControlSets.Add(cs); // for each sub control, do a save on the whole thing
                     }
                 }

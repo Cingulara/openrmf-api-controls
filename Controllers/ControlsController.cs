@@ -32,12 +32,29 @@ namespace openstig_api_controls.Controllers
             _context = context; // pass in the database in memory
         }
 
-        // GET the compliance listing for a system
+        // GET the full listing of NIST 800-53 controls
         [HttpGet]
         public async Task<IActionResult> GetAllControls()
         {
             try {
                 var result = await _context.ControlSets.ToListAsync();
+                if (result != null)
+                    return Ok(result);
+                else
+                    return NotFound(); // nothing loaded yet
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex, "Error listing all control sets. Please check the in memory database and XML file load.");
+                return BadRequest();
+            }
+        }
+                
+        // GET the full listing of NIST 800-53 controls
+        [HttpGet("{term}")]
+        public async Task<IActionResult> GetControl(string term)
+        {
+            try {
+                var result = await _context.ControlSets.Where(x => x.subControlNumber == term).ToListAsync();
                 if (result != null)
                     return Ok(result);
                 else
