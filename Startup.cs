@@ -106,6 +106,7 @@ namespace openstig_api_controls
             List<Control> controls = Classes.ControlsLoader.LoadControls();
             // for each one, load into the in-memory DB
             ControlSet cs;
+            string formatNumber;
             foreach (Control c in controls) {
                 cs = new ControlSet(); // the flattened controls table listing for the in memory DB
                 cs.family = c.family;
@@ -123,7 +124,10 @@ namespace openstig_api_controls
                         cs.id = Guid.NewGuid(); // need a new PK ID for each record saved
                         if (!string.IsNullOrEmpty(cc.description))
                             cs.subControlDescription = cc.description.Replace("\r","").Replace("\n","");
-                        cs.subControlNumber = cc.number.Replace(" ", ""); // remove periods and empty space for searching later
+                        formatNumber = cc.number.Replace(" ", ""); // remove periods and empty space for searching later
+                        if (formatNumber.EndsWith(".")) 
+                            formatNumber = formatNumber.Substring(0,formatNumber.Length-1); // take off the trailing period
+                        cs.subControlNumber = formatNumber; 
                         context.ControlSets.Add(cs); // for each sub control, do a save on the whole thing
                         Console.WriteLine("Adding number " + cs.subControlNumber);
                         context.SaveChanges();

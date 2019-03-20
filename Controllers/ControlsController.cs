@@ -55,8 +55,8 @@ namespace openstig_api_controls.Controllers
         {
             if (!string.IsNullOrEmpty(term)) {
                 try {
-                    term = term.Replace(" ", ""); // get rid of things we do not need
-                    var result = await _context.ControlSets.Where(x => x.subControlNumber == term || x.number == term).ToListAsync();
+                    string searchTerm = term.Replace(" ", ""); // get rid of things we do not need
+                    var result = await _context.ControlSets.Where(x => x.subControlNumber == searchTerm || x.number == searchTerm).ToListAsync();
                     if (result != null && result.Count > 0)
                         return Ok(result);
                     else 
