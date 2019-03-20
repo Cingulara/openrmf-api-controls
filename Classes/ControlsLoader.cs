@@ -57,6 +57,21 @@ namespace openstig_api_controls.Classes {
                                 c.childControls.Add(cc);
                             }
                         }
+                        else if (controlData.Name == "control-enhancements") {
+                            // get the subparts of this control enhancement section
+                            statementList = controlData.GetElementsByTagName("control-enhancement");
+                            foreach (XmlElement statementChild in statementList) {
+                                cc = new ChildControl();
+                                // get all the sub controls listed
+                                foreach (XmlElement statementData in statementChild.ChildNodes) {
+                                    if (statementData.Name == "number")
+                                        cc.number = statementData.InnerText;
+                                    else if (statementData.Name == "title")
+                                        cc.description = statementData.InnerText;
+                                }
+                                c.childControls.Add(cc);
+                            }
+                        }
                         else if (controlData.Name == "supplemental-guidance") {
                             // get the description
                             if (controlData.ChildNodes.Count > 0) {
