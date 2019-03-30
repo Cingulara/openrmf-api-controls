@@ -32,7 +32,6 @@
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
                 "ASPNETCORE_URLS": "http://*:8094"
-                //"openstig-api-read-server" : "http://localhost:8084"
             }
         },
         {

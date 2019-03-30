@@ -32,21 +32,69 @@ namespace openstig_api_controls.Controllers
             _context = context; // pass in the database in memory
         }
 
-        // GET the compliance listing for a system
+        // GET the full listing of NIST 800-53 controls
         [HttpGet]
         public async Task<IActionResult> GetAllControls()
         {
             try {
-                var result = await _context.Controls.ToListAsync();
+                var result = await _context.ControlSets.ToListAsync();
                 if (result != null)
                     return Ok(result);
                 else
                     return NotFound(); // nothing loaded yet
             }
             catch (Exception ex) {
-                _logger.LogError(ex, "Error listing all controls...check the in memory database and XML file load.");
+                _logger.LogError(ex, "Error listing all control sets. Please check the in memory database and XML file load.");
                 return BadRequest();
             }
+        }
+                
+        // GET the full listing of NIST 800-53 controls
+        [HttpGet("{term}")]
+        public async Task<IActionResult> GetControl(string term)
+        {
+            if (!string.IsNullOrEmpty(term)) {
+                try {
+                    string searchTerm = term.Replace(" ", ""); // get rid of things we do not need
+                    var result = await _context.ControlSets.Where(x => x.subControlNumber == searchTerm || x.number == searchTerm).ToListAsync();
+                    if (result != null && result.Count > 0)
+                        return Ok(result);
+                    else { // try to get the main family description and return that
+                        int index = GetFirstIndex(term);
+                        if (index < 0)
+                            return NotFound(); // nothing loaded yet
+                        else { // see if there is a family title we can pass back
+                            searchTerm = term.Substring(0, index).Trim();
+                            result = await _context.ControlSets.Where(x => x.subControlNumber == searchTerm || x.number == searchTerm).ToListAsync();
+                            if (result != null && result.Count > 0)
+                                return Ok(result.FirstOrDefault());
+                            else
+                                return NotFound();
+                        }
+                    }
+                }
+                catch (Exception ex) {
+                    _logger.LogError(ex, "Error listing all control sets. Please check the in memory database and XML file load.");
+                    return BadRequest();
+                }
+            }
+            else
+                return NotFound();
+        }
+
+        private int GetFirstIndex(string term) {
+            int space = term.IndexOf(" ");
+            int period = term.IndexOf(".");
+            if (space < 0 && period < 0)
+                return -1;
+            else if (space > 0 && period > 0 && space < period ) // see which we hit first
+                return space;
+            else if (space > 0 && period > 0 && space > period )
+                return period;
+            else if (space > 0) 
+                return space;
+            else 
+                return period;
         }
 
     }

@@ -10,6 +10,6 @@ namespace openstig_api_controls.Database
     
         }  
 
-        public DbSet<Control> Controls { get; set; }
+        public DbSet<ControlSet> ControlSets { get; set; }
     }  
 }
