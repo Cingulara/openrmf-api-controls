@@ -33,7 +33,7 @@ namespace openstig_api_controls
         {
             // Register the database components
             services.AddDbContext<ControlsDBContext>(context => 
-                {context.UseInMemoryDatabase("Controls"); });  
+                {context.UseInMemoryDatabase("ControlSet"); });  
             
             // Register the Swagger generator, defining one or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -79,30 +79,9 @@ namespace openstig_api_controls
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                var context = serviceScope.ServiceProvider.GetService<ControlsDBContext>();
-                // Seed the database.
-                Control c = new Control();
-                c.family = "ACCESS CONTROL";
-                c.number = "AC-1";
-                c.title = "ACCESS CONTROL POLICY AND PROCEDURES";
-                c.priority = "P1";
-                c.lowimpact = true;
-                c.moderateimpact = true;
-                c.highimpact = true;
-
-                ChildControl cc = new ChildControl();
-                cc.number = "AC-1a";
-                cc.description = "Develops, documents, and disseminates to [Assignment: organization-defined personnel or roles]";
-                c.childControls.Add(cc);
-                cc.number = "AC-1a1";
-                cc.description = "An access control policy that addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance";
-                c.childControls.Add(cc);
-                // save it
-                context.Controls.Add(c);
-                context.SaveChanges();
+                LoadControlsXML(serviceScope.ServiceProvider.GetService<ControlsDBContext>());
             }
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
@@ -123,5 +102,44 @@ namespace openstig_api_controls
             app.UseMvc();
         }
 
+        private void LoadControlsXML(ControlsDBContext context) {
+            List<Control> controls = Classes.ControlsLoader.LoadControls();
+            // for each one, load into the in-memory DB
+            ControlSet cs;
+            string formatNumber;
+            foreach (Control c in controls) {
+                cs = new ControlSet(); // the flattened controls table listing for the in memory DB
+                cs.family = c.family;
+                cs.highimpact = c.highimpact;
+                cs.moderateimpact = c.moderateimpact;
+                cs.lowimpact = c.lowimpact;
+                cs.number = c.number;
+                cs.priority = c.priority;
+                cs.title = c.title;
+                if (!string.IsNullOrEmpty(c.supplementalGuidance))
+                    cs.supplementalGuidance = c.supplementalGuidance.Replace("\\r","").Replace("\\n","");
+                if (c.childControls.Count > 0)
+                {
+                    foreach (ChildControl cc in c.childControls) {
+                        cs.id = Guid.NewGuid(); // need a new PK ID for each record saved
+                        if (!string.IsNullOrEmpty(cc.description))
+                            cs.subControlDescription = cc.description.Replace("\r","").Replace("\n","");
+                        formatNumber = cc.number.Replace(" ", ""); // remove periods and empty space for searching later
+                        if (formatNumber.EndsWith(".")) 
+                            formatNumber = formatNumber.Substring(0,formatNumber.Length-1); // take off the trailing period
+                        cs.subControlNumber = formatNumber; 
+                        context.ControlSets.Add(cs); // for each sub control, do a save on the whole thing
+                        Console.WriteLine("Adding number " + cs.subControlNumber);
+                        context.SaveChanges();
+                    }
+                }
+                else {
+                    cs.id = Guid.NewGuid();
+                    context.ControlSets.Add(cs); // for some reason no sub controls
+                    context.SaveChanges();
+                }
+            }
+            context.SaveChanges();
+        }
     }
 }
