@@ -1,4 +1,4 @@
-VERSION ?= 0.5
+VERSION ?= 0.6
 NAME ?= "openstig-api-controls"
 AUTHOR ?= "Dale Bingham"
 PORT_EXT ?= 8094
