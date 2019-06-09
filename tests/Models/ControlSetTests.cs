@@ -3,12 +3,12 @@ using Xunit;
 using openstig_api_controls.Models;
 using Moq;
 
-namespace tests
+namespace tests.Models
 {
     public class ControlSetTests
     {
         [Fact]
-        public void Test_NewControlSet()
+        public void Test_NewControlSetIsValid()
         {
             ControlSet cs = new ControlSet();
             Assert.True(cs != null);
@@ -19,7 +19,7 @@ namespace tests
         }
 
         [Fact]
-        public void Test_ControlSetWidhData()
+        public void Test_ControlSetWidhDataIsValid()
         {
             ControlSet cs = new ControlSet();
             cs.family = "AC";

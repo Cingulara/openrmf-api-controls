@@ -3,12 +3,12 @@ using Xunit;
 using openstig_api_controls.Models;
 using Moq;
 
-namespace tests
+namespace tests.Models
 {
     public class ControlTests
     {
         [Fact]
-        public void Test_NewControl()
+        public void Test_NewControlIsValid()
         {
             Control cs = new Control();
             Assert.True(cs != null);
@@ -20,7 +20,7 @@ namespace tests
         }
     
         [Fact]
-        public void Test_ControlWithData()
+        public void Test_ControlWithDataIsValid()
         {
             ChildControl cc = new ChildControl();
             cc.description = "My Child Description";
