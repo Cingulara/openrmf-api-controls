@@ -9,7 +9,7 @@ DOCKERHUB_ACCOUNT ?= cingulara
 .PHONY: build latest docker clean version dockerhub
 
 build:  
-	dotnet build
+	dotnet build src
 
 docker: 
 	docker build -f Dockerfile -t $(NAME)\:$(VERSION) --no-cache=$(NO_CACHE) .
@@ -22,8 +22,8 @@ latest:
 	docker logout
    
 clean:
-	@rm -f -r obj
-	@rm -f -r bin
+	@rm -f -r src/obj
+	@rm -f -r src/bin
 
 version:
 	@echo ${VERSION}
