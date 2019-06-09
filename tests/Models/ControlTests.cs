@@ -27,7 +27,7 @@ namespace tests
             cc.number = "AC-1.1";
 
             Control cs = new Control();
-            cs.family = "Family";
+            cs.family = "AC";
             cs.number = "AC-1";
             cs.title = "My Title";
             cs.priority = "P1";
