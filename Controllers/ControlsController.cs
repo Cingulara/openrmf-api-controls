@@ -34,12 +34,23 @@ namespace openstig_api_controls.Controllers
 
         // GET the full listing of NIST 800-53 controls
         [HttpGet]
-        public async Task<IActionResult> GetAllControls()
+        public async Task<IActionResult> GetAllControls(string filter = "")
         {
             try {
                 var result = await _context.ControlSets.ToListAsync();
                 if (result != null)
-                    return Ok(result);
+                    if (string.IsNullOrEmpty(filter))
+                        return Ok(result);
+                    else {
+                        if (filter.Trim().ToLower() == "low")
+                            return Ok(result.Where(x => x.lowimpact).ToList());
+                        else if (filter.Trim().ToLower() == "moderate")
+                            return Ok(result.Where(x => x.moderateimpact).ToList());
+                        else if (filter.Trim().ToLower() == "high")
+                            return Ok(result.Where(x => x.highimpact).ToList());
+                        else 
+                            return Ok(result);
+                    }
                 else
                     return NotFound(); // nothing loaded yet
             }
@@ -49,7 +60,8 @@ namespace openstig_api_controls.Controllers
             }
         }
                 
-        // GET the full listing of NIST 800-53 controls
+        // GET the text of a control passed in from the compliance page when you click on an individual 
+        // item on a single-checklist page that is filtered based on compliance
         [HttpGet("{term}")]
         public async Task<IActionResult> GetControl(string term)
         {
