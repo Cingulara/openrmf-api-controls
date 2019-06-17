@@ -34,23 +34,26 @@ namespace openstig_api_controls.Controllers
 
         // GET the full listing of NIST 800-53 controls
         [HttpGet]
-        public async Task<IActionResult> GetAllControls(string filter = "")
+        public async Task<IActionResult> GetAllControls(string filter = "", bool pii = false)
         {
             try {
-                var result = await _context.ControlSets.ToListAsync();
-                if (result != null)
-                    if (string.IsNullOrEmpty(filter))
-                        return Ok(result);
-                    else {
-                        if (filter.Trim().ToLower() == "low")
-                            return Ok(result.Where(x => x.lowimpact).ToList());
-                        else if (filter.Trim().ToLower() == "moderate")
-                            return Ok(result.Where(x => x.moderateimpact).ToList());
-                        else if (filter.Trim().ToLower() == "high")
-                            return Ok(result.Where(x => x.highimpact).ToList());
-                        else 
-                            return Ok(result);
+                var listing = await _context.ControlSets.ToListAsync();
+                var result = new List<ControlSet>(); // put all results in here
+                if (listing != null) {
+                    // figure out the impact level filter
+                    if (filter.Trim().ToLower() == "low")
+                        result = listing.Where(x => x.lowimpact).ToList();
+                    else if (filter.Trim().ToLower() == "moderate")
+                        result = listing.Where(x => x.moderateimpact).ToList();
+                    else if (filter.Trim().ToLower() == "high")
+                        result = listing.Where(x => x.highimpact).ToList();
+                    // see if the PII  filter is true, and if so add in the PII family by appending that to the result from above
+                    if (pii) {
+                        result.AddRange(listing.Where(x => !string.IsNullOrEmpty(x.family) && x.family.ToLower() == "pii").ToList());
                     }
+                    // return whatever is in here
+                    return Ok(result);
+                }
                 else
                     return NotFound(); // nothing loaded yet
             }
