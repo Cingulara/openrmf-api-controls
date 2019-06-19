@@ -47,6 +47,12 @@ namespace openstig_api_controls.Controllers
                         result = listing.Where(x => x.moderateimpact).ToList();
                     else if (filter.Trim().ToLower() == "high")
                         result = listing.Where(x => x.highimpact).ToList();
+
+                    // include things that are not P0 meaning not used, and that there is no low/moderate/high designation
+                    // these should always be included where the combination of all "false" and not P0 = include them
+                    result.AddRange(listing.Where(x => x.priority != "P0" && 
+                        !x.lowimpact && !x.moderateimpact && !x.highimpact ).ToList());
+
                     // see if the PII  filter is true, and if so add in the PII family by appending that to the result from above
                     if (pii) {
                         result.AddRange(listing.Where(x => !string.IsNullOrEmpty(x.family) && x.family.ToLower() == "pii").ToList());
