@@ -7,7 +7,7 @@ COPY src/*.csproj ./
 RUN dotnet restore
 
 # copy the rest and build
-COPY src/ ./
+COPY ./src/ ./
 RUN dotnet build
 RUN dotnet publish -c Release -o out
 
