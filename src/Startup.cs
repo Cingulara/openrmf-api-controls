@@ -38,13 +38,13 @@ namespace openstig_api_controls
             // Register the Swagger generator, defining one or more Swagger documents
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "openSTIG Controls API", Version = "v1", 
-                    Description = "The Controls API that goes with the openSTIG tool",
+                c.SwaggerDoc("v1", new Info { Title = "openRMF Controls API", Version = "v1", 
+                    Description = "The Controls API that goes with the openRMF tool",
                     Contact = new Contact
                     {
                         Name = "Dale Bingham",
                         Email = "dale.bingham@cingulara.com",
-                        Url = "https://github.com/Cingulara/openstig-api-controls"
+                        Url = "https://github.com/Cingulara/openrmf-api-controls"
                     } });
             });
 
@@ -90,7 +90,7 @@ namespace openstig_api_controls
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(s =>
             {
-                s.SwaggerEndpoint("/swagger/v1/swagger.json", "openSTIG Controls API V1");
+                s.SwaggerEndpoint("/swagger/v1/swagger.json", "openRMF Controls API V1");
             });
 
             // ********************

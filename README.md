@@ -4,3 +4,6 @@ can match the CCI to NIST XML from DISA.
 
 ## Making your local Docker image
 make docker
+
+## Moq with xUnit
+* dotnet add reference ..\path-to-file\xxxxx.csproj
