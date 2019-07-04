@@ -3,11 +3,11 @@ RUN mkdir /app
 WORKDIR /app
 
 # copy the project and restore as distinct layers in the image
-COPY *.csproj ./
+COPY src/*.csproj ./
 RUN dotnet restore
 
 # copy the rest and build
-COPY . ./
+COPY ./src/ ./
 RUN dotnet build
 RUN dotnet publish -c Release -o out
 
@@ -18,4 +18,4 @@ WORKDIR /app
 # RUN apt-get update && apt-get -y install ca-certificates
 
 COPY --from=build-env /app/out ./
-ENTRYPOINT ["dotnet", "openstig-api-controls.dll"]
+ENTRYPOINT ["dotnet", "openrmf-api-controls.dll"]
