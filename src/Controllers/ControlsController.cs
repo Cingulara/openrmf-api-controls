@@ -5,17 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using openstig_api_controls.Models;
 using openstig_api_controls.Database;
-using System.IO;
-using System.Text;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using System.Xml.Serialization;
-using System.Xml;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Newtonsoft.Json;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 
 namespace openstig_api_controls.Controllers
@@ -34,6 +25,7 @@ namespace openstig_api_controls.Controllers
 
         // GET the full listing of NIST 800-53 controls
         [HttpGet]
+        [Authorize(Roles = "Administrator,Reader,Editor,Assessor")]
         public async Task<IActionResult> GetAllControls(string filter = "", bool pii = false)
         {
             try {
@@ -72,6 +64,7 @@ namespace openstig_api_controls.Controllers
         // GET the text of a control passed in from the compliance page when you click on an individual 
         // item on a single-checklist page that is filtered based on compliance
         [HttpGet("{term}")]
+        [Authorize(Roles = "Administrator,Reader,Editor,Assessor")]
         public async Task<IActionResult> GetControl(string term)
         {
             if (!string.IsNullOrEmpty(term)) {
