@@ -32,8 +32,9 @@
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
                 "ASPNETCORE_URLS": "http://*:8094",
-                "JWT-AUTHORITY" : "http://192.168.0.14:9001/auth/realms/openrmf",
-                "JWT-CLIENT": "openrmf"
+                "JWT-AUTHORITY" : "http://192.168.11.23:9001/auth/realms/openrmf",
+                "JWT-CLIENT": "openrmf",
+                "natsserverurl": "nats://127.0.0.1:4222"
             }
         },
         {
