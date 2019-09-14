@@ -4,6 +4,7 @@ using System.Text;
 using NATS.Client;
 using openstig_api_controls.Models;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace openstig_api_controls.Classes
 {
@@ -34,6 +35,31 @@ namespace openstig_api_controls.Classes
             }
             c.Close();
             return controls;
+        }
+
+
+        /// <summary>
+        /// Return a control based on the search term sent
+        /// </summary>
+        /// <param name="term">The control title or search to get a control record back.</param>
+        /// <returns></returns>
+        public static ControlSet GetControlRecord(string term){
+            // get the result ready to receive the info and send on
+            ControlSet control = new ControlSet();
+            // Create a new connection factory to create a connection.
+            ConnectionFactory cf = new ConnectionFactory();
+            // Creates a live connection to the default NATS Server running locally
+            IConnection c = cf.CreateConnection(Environment.GetEnvironmentVariable("natsserverurl"));
+            // send the message with data of the filter serialized
+            Msg reply = c.Request("openrmf.controls.search", Encoding.UTF8.GetBytes(term), 30000);
+            // save the reply and get back the checklist to score
+            if (reply != null) {
+                control = JsonConvert.DeserializeObject<ControlSet>(Compression.DecompressString(Encoding.UTF8.GetString(reply.Data)));
+                c.Close();
+                return control;
+            }
+            c.Close();
+            return control;
         }
     }
 }

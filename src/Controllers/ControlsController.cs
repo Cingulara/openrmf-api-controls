@@ -58,5 +58,24 @@ namespace openstig_api_controls.Controllers
                 return BadRequest();
             }
         }
+                // GET the text of a control passed in from the compliance page when you click on an individual 
+        // item on a single-checklist page that is filtered based on compliance
+        [HttpGet("{term}")]
+        [Authorize(Roles = "Administrator,Reader,Editor,Assessor")]
+        public async Task<IActionResult> GetControl(string term)
+        {
+            if (!string.IsNullOrEmpty(term)) {
+                try {
+                    var record = NATSClient.GetControlRecord(term);
+                    return Ok(record);
+                }
+                catch (Exception ex) {
+                    _logger.LogError(ex, "Error listing all control sets. Please check the in memory database and XML file load.");
+                    return BadRequest();
+                }
+            }
+            else
+                return NotFound();
+        }
     }
 }
