@@ -24,7 +24,7 @@ namespace openstig_api_controls.Classes
             // Create a new connection factory to create a connection.
             ConnectionFactory cf = new ConnectionFactory();
             // Creates a live connection to the default NATS Server running locally
-            IConnection c = cf.CreateConnection(Environment.GetEnvironmentVariable("natsserverurl"));
+            IConnection c = cf.CreateConnection(Environment.GetEnvironmentVariable("NATSSERVERURL"));
             // send the message with data of the filter serialized
             Msg reply = c.Request("openrmf.controls", Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(controlFilter)), 30000);
             // save the reply and get back the checklist to score
@@ -49,7 +49,7 @@ namespace openstig_api_controls.Classes
             // Create a new connection factory to create a connection.
             ConnectionFactory cf = new ConnectionFactory();
             // Creates a live connection to the default NATS Server running locally
-            IConnection c = cf.CreateConnection(Environment.GetEnvironmentVariable("natsserverurl"));
+            IConnection c = cf.CreateConnection(Environment.GetEnvironmentVariable("NATSSERVERURL"));
             // send the message with data of the filter serialized
             Msg reply = c.Request("openrmf.controls.search", Encoding.UTF8.GetBytes(term), 30000);
             // save the reply and get back the checklist to score
