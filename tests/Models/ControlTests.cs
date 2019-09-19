@@ -1,7 +1,5 @@
-using System;
 using Xunit;
 using openstig_api_controls.Models;
-using Moq;
 
 namespace tests.Models
 {

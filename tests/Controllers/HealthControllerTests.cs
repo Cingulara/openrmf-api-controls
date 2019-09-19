@@ -1,14 +1,7 @@
-using System;
 using Xunit;
 using openstig_api_controls.Controllers;
 using Moq;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Http;
 
 namespace tests.Controllers
 {
