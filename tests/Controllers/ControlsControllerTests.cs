@@ -1,16 +1,7 @@
-using System;
 using Xunit;
 using openstig_api_controls.Controllers;
-using openstig_api_controls.Database;
 using Moq;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 
 namespace tests.Controllers
 {
@@ -19,14 +10,10 @@ namespace tests.Controllers
     {
         private readonly Mock<ILogger<ControlsController>> _mockLogger;
         private readonly ControlsController _controlsController; 
-        private readonly Mock<ControlsDBContext> _context;
-        private readonly Mock<DbContextOptions<ControlsDBContext>> _contextOptions;
 
         public ControlsControllerTests() {
             _mockLogger = new Mock<ILogger<ControlsController>>();
-            _contextOptions = new Mock<DbContextOptions<ControlsDBContext>>();
-            _context = new Mock<ControlsDBContext>(_contextOptions);
-            _controlsController = new ControlsController(_mockLogger.Object, _context.Object);
+            _controlsController = new ControlsController(_mockLogger.Object);
         }
 
         [Fact]
