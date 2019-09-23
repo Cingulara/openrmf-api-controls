@@ -1,4 +1,4 @@
-VERSION ?= 0.7
+VERSION ?= 0.8
 NAME ?= "openrmf-api-controls"
 AUTHOR ?= "Dale Bingham"
 PORT_EXT ?= 8094
@@ -16,10 +16,8 @@ docker:
 
 latest: 
 	docker build -f Dockerfile -t $(NAME)\:latest --no-cache=$(NO_CACHE) .
-	docker login -u ${DOCKERHUB_ACCOUNT}
 	docker tag $(NAME)\:latest ${DOCKERHUB_ACCOUNT}\/$(NAME)\:latest
 	docker push ${DOCKERHUB_ACCOUNT}\/$(NAME)\:latest
-	docker logout
    
 clean:
 	@rm -f -r src/obj
@@ -29,9 +27,7 @@ version:
 	@echo ${VERSION}
 
 dockerhub:
-	docker login -u ${DOCKERHUB_ACCOUNT}
 	docker tag $(NAME)\:$(VERSION) ${DOCKERHUB_ACCOUNT}\/$(NAME)\:$(VERSION)
 	docker push ${DOCKERHUB_ACCOUNT}\/$(NAME)\:$(VERSION)
-	docker logout
 
 DEFAULT: build
