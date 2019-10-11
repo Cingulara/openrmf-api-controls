@@ -2,7 +2,7 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace openstig_api_controls.Controllers
+namespace openrmf_api_controls.Controllers
 {
     [Route("healthz")]
     public class HealthController : Controller

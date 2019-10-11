@@ -1,5 +1,5 @@
 using Xunit;
-using openstig_api_controls.Models;
+using openrmf_api_controls.Models;
 
 namespace tests.Models
 {

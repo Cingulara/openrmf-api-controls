@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace openstig_api_controls.Models
+namespace openrmf_api_controls.Models
 {
 
   public class ControlSet {
