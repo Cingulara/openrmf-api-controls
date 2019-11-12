@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using openstig_api_controls.Models;
-using openstig_api_controls.Classes;
-using Microsoft.EntityFrameworkCore;
+using openrmf_api_controls.Models;
+using openrmf_api_controls.Classes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 
-namespace openstig_api_controls.Controllers
+namespace openrmf_api_controls.Controllers
 {
     [Route("/")]
     public class ControlsController : Controller

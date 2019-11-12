@@ -3,7 +3,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Text;
 
-namespace openstig_api_controls.Classes
+namespace openrmf_api_controls.Classes
 {
     public static class Compression
     {        
