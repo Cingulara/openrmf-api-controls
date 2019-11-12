@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NATS.Client;
-using openstig_api_controls.Models;
+using openrmf_api_controls.Models;
 using Newtonsoft.Json;
-using System.Linq;
 
-namespace openstig_api_controls.Classes
+namespace openrmf_api_controls.Classes
 {
     public static class NATSClient
     {        

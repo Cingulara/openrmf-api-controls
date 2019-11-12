@@ -1,5 +1,5 @@
 using Xunit;
-using openstig_api_controls.Controllers;
+using openrmf_api_controls.Controllers;
 using Moq;
 using Microsoft.Extensions.Logging;
 

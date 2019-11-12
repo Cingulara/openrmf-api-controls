@@ -1,4 +1,4 @@
-namespace openstig_api_controls.Models
+namespace openrmf_api_controls.Models
 {
 
   public class Filter {
