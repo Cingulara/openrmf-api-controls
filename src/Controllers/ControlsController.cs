@@ -39,6 +39,7 @@ namespace openrmf_api_controls.Controllers
         public async Task<IActionResult> GetAllControls(string impactlevel = "", bool pii = false)
         {
             try {
+                _logger.LogInformation("Calling GetAllControls({0}, {1})", impactlevel, pii.ToString());
                 var listing = NATSClient.GetControlRecords(impactlevel, pii);
                 var result = new List<ControlSet>(); // put all results in here
                 if (listing != null) {
@@ -60,13 +61,16 @@ namespace openrmf_api_controls.Controllers
                         result.AddRange(listing.Where(x => !string.IsNullOrEmpty(x.family) && x.family.ToLower() == "pii").ToList());
                     }
                     // return whatever is in here
+                    _logger.LogInformation("Called GetAllControls({0}, {1}) successfully", impactlevel, pii.ToString());
                     return Ok(result);
                 }
-                else
+                else {
+                    _logger.LogWarning("Called GetAllControls({0}, {1}) but no control records listing returned", impactlevel, pii.ToString());
                     return NotFound(); // nothing loaded yet
+                }
             }
             catch (Exception ex) {
-                _logger.LogError(ex, "Error listing all control sets. Please check the in memory database and XML file load.");
+                _logger.LogError(ex, "GetAllControls() Error listing all control sets. Please check the in memory database and XML file load.");
                 return BadRequest();
             }
         }
@@ -86,18 +90,26 @@ namespace openrmf_api_controls.Controllers
         [Authorize(Roles = "Administrator,Reader,Editor,Assessor")]
         public async Task<IActionResult> GetControl(string term)
         {
+            _logger.LogInformation("Calling GetControl({0})", term);
             if (!string.IsNullOrEmpty(term)) {
                 try {
                     var record = NATSClient.GetControlRecord(term);
+                    if (record == null) {
+                        _logger.LogWarning("GetControl({0}) term not found", term);
+                        return NotFound();
+                    }
+                    _logger.LogInformation("Called GetControl({0}) successfully", term);
                     return Ok(record);
                 }
                 catch (Exception ex) {
-                    _logger.LogError(ex, "Error listing all control sets. Please check the in memory database and XML file load.");
+                    _logger.LogError(ex, "GetControl() Error listing all control sets. Please check the in memory database and XML file load.");
                     return BadRequest();
                 }
             }
-            else
-                return NotFound();
+            else {
+                _logger.LogWarning("GetControl({0}) term was not sent in the API call");
+                return BadRequest("No valid control term sent");
+            }
         }
     }
 }
