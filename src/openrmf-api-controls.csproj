@@ -8,7 +8,7 @@
     <ProjectGuid>{6589fd80-18ff-45c9-bf50-f7007fa66bc2}</ProjectGuid>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <Version>0.10.5</Version>
+    <Version>0.10.7</Version>
     <InformationalVersion>This is a beta of the OpenRMF Tool Controls API from Cingulara</InformationalVersion>
   </PropertyGroup>
 
@@ -23,6 +23,8 @@
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.7.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
     <PackageReference Include="NATS.Client" Version="0.9.0" />
+    <PackageReference Include="prometheus-net" Version="3.4.0" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="3.4.0" />
   </ItemGroup>
 
   <ItemGroup>
