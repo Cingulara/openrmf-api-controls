@@ -1,4 +1,4 @@
-﻿// Copyright (c) Cingulara LLC 2019 and Tutela LLC 2019. All rights reserved.
+﻿// Copyright (c) Cingulara LLC 2020 and Tutela LLC 2020. All rights reserved.
 // Licensed under the GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -105,7 +105,7 @@ namespace openrmf_api_controls
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             // Custom Metrics to count requests for each endpoint and the method
-            var counter = Metrics.CreateCounter("openrmf_path_counter", "Counts requests to OpenRMF endpoints", new CounterConfiguration
+            var counter = Metrics.CreateCounter("openrmf_controls_api_path_counter", "Counts requests to OpenRMF endpoints", new CounterConfiguration
             {
                 LabelNames = new[] { "method", "endpoint" }
             });
