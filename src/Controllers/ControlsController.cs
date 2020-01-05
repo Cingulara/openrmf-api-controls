@@ -41,28 +41,9 @@ namespace openrmf_api_controls.Controllers
             try {
                 _logger.LogInformation("Calling GetAllControls({0}, {1})", impactlevel, pii.ToString());
                 var listing = NATSClient.GetControlRecords(impactlevel, pii);
-                var result = new List<ControlSet>(); // put all results in here
                 if (listing != null) {
-                    // figure out the impact level filter
-                    if (impactlevel.Trim().ToLower() == "low")
-                        result = listing.Where(x => x.lowimpact).ToList();
-                    else if (impactlevel.Trim().ToLower() == "moderate")
-                        result = listing.Where(x => x.moderateimpact).ToList();
-                    else if (impactlevel.Trim().ToLower() == "high")
-                        result = listing.Where(x => x.highimpact).ToList();
-
-                    // include things that are not P0 meaning not used, and that there is no low/moderate/high designation
-                    // these should always be included where the combination of all "false" and not P0 = include them
-                    result.AddRange(listing.Where(x => x.priority != "P0" && 
-                        !x.lowimpact && !x.moderateimpact && !x.highimpact ).ToList());
-
-                    // see if the PII is true, and if so add in the PII family by appending that to the result from above
-                    if (pii) {
-                        result.AddRange(listing.Where(x => !string.IsNullOrEmpty(x.family) && x.family.ToLower() == "pii").ToList());
-                    }
-                    // return whatever is in here
                     _logger.LogInformation("Called GetAllControls({0}, {1}) successfully", impactlevel, pii.ToString());
-                    return Ok(result);
+                    return Ok(listing);
                 }
                 else {
                     _logger.LogWarning("Called GetAllControls({0}, {1}) but no control records listing returned", impactlevel, pii.ToString());

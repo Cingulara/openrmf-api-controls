@@ -64,7 +64,7 @@ namespace openrmf_api_controls.Classes
             IConnection c = cf.CreateConnection(opts);
 
             // send the message with data of the filter serialized
-            Msg reply = c.Request("openrmf.controls", Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(controlFilter)), 30000);
+            Msg reply = c.Request("openrmf.controls", Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(controlFilter)), 10000);
             // save the reply and get back the checklist to score
             if (reply != null) {
                 controls = JsonConvert.DeserializeObject<List<ControlSet>>(Compression.DecompressString(Encoding.UTF8.GetString(reply.Data)));
@@ -124,7 +124,7 @@ namespace openrmf_api_controls.Classes
             IConnection c = cf.CreateConnection(opts);
 
             // send the message with data of the filter serialized
-            Msg reply = c.Request("openrmf.controls.search", Encoding.UTF8.GetBytes(term), 30000);
+            Msg reply = c.Request("openrmf.controls.search", Encoding.UTF8.GetBytes(term), 10000);
             // save the reply and get back the checklist to score
             if (reply != null) {
                 control = JsonConvert.DeserializeObject<ControlSet>(Compression.DecompressString(Encoding.UTF8.GetString(reply.Data)));
