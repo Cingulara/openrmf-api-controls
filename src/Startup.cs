@@ -9,9 +9,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Http;
 using Prometheus;
+using OpenTracing;
+using OpenTracing.Util;
+using Jaeger;
+using Jaeger.Samplers;
 
 namespace openrmf_api_controls
 {
@@ -27,6 +32,25 @@ namespace openrmf_api_controls
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Use "OpenTracing.Contrib.NetCore" to automatically generate spans for ASP.NET Core
+            services.AddSingleton<ITracer>(serviceProvider =>  
+            {  
+                string serviceName = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;  
+            
+                ILoggerFactory loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();  
+            
+                ISampler sampler = new ConstSampler(sample: true);  
+            
+                ITracer tracer = new Tracer.Builder(serviceName)  
+                    .WithLoggerFactory(loggerFactory)  
+                    .WithSampler(sampler)  
+                    .Build();  
+            
+                GlobalTracer.Register(tracer);  
+            
+                return tracer;  
+            });
+            services.AddOpenTracing();
            
             // Register the Swagger generator, defining one or more Swagger documents
             services.AddSwaggerGen(c =>
