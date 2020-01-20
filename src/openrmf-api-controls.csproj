@@ -8,11 +8,12 @@
     <ProjectGuid>{6589fd80-18ff-45c9-bf50-f7007fa66bc2}</ProjectGuid>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <Version>0.9</Version>
+    <Version>0.11</Version>
     <InformationalVersion>This is a beta of the OpenRMF Tool Controls API from Cingulara</InformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="jaeger" Version="0.3.6" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
@@ -21,8 +22,11 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="NLog" Version="4.5.11" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.7.1" />
+    <PackageReference Include="OpenTracing.Contrib.NetCore" Version="0.6.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
     <PackageReference Include="NATS.Client" Version="0.9.0" />
+    <PackageReference Include="prometheus-net" Version="3.4.0" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="3.4.0" />
   </ItemGroup>
 
   <ItemGroup>
