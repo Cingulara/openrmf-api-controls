@@ -80,7 +80,7 @@ namespace openrmf_api_controls.Controllers
                                 number = g.Key.number, 
                                 title = g.Key.title}).ToList();
                     // return the distint listing
-                    return Ok(listing.Distinct().OrderBy(x => x.number).ToList());
+                    return Ok(listing.Distinct().OrderBy(x => x.indexsort).ToList());
                 }
                 else {
                     _logger.LogWarning("Called GetAllMajorControls() but no control records listing returned");
