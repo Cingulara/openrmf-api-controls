@@ -1,4 +1,4 @@
-VERSION ?= 0.12
+VERSION ?= 0.12.1
 NAME ?= "openrmf-api-controls"
 AUTHOR ?= "Dale Bingham"
 PORT_EXT ?= 8094
