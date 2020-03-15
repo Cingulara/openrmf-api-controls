@@ -57,6 +57,43 @@ namespace openrmf_api_controls.Controllers
         }
 
         /// <summary>
+        /// GET the full listing of NIST 800-53 major controls based on impact level and PII boolean
+        /// </summary>
+        /// <returns>
+        /// HTTP Status showing they were found and a list of control records for the NIST controls.
+        /// </returns>
+        /// <response code="200">Returns the newly updated item</response>
+        /// <response code="400">If the get did not work correctly</response>
+        /// <response code="404">If the impact passed is not valid</response>
+        [HttpGet("majorcontrols")]
+        [Authorize(Roles = "Administrator,Reader,Editor,Assessor")]
+        public async Task<IActionResult> GetAllMajorControls()
+        {
+            try {
+                _logger.LogInformation("Calling GetAllMajorControls()");
+                var listing = NATSClient.GetControlRecords("high", true);
+                if (listing != null) {
+                    _logger.LogInformation("Called GetAllMajorControls() successfully");
+                    // get just the id, number, and title
+                    listing = listing.GroupBy(x => new {x.number, x.title})
+                            .Select(g => new ControlSet {
+                                number = g.Key.number, 
+                                title = g.Key.title}).ToList();
+                    // return the distint listing
+                    return Ok(listing.Distinct().OrderBy(x => x.indexsort).ToList());
+                }
+                else {
+                    _logger.LogWarning("Called GetAllMajorControls() but no control records listing returned");
+                    return NotFound(); // nothing loaded yet
+                }
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex, "GetAllMajorControls() Error listing all control sets. Please check the in memory database and XML file load.");
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
         /// GET the text of a control passed in from the compliance page when you click on an individual 
         /// item on a single-checklist page that is filtered based on compliance
         /// </summary>
