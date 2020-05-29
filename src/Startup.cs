@@ -15,8 +15,6 @@ using Microsoft.AspNetCore.Http;
 using Prometheus;
 using OpenTracing;
 using OpenTracing.Util;
-using Jaeger;
-using Jaeger.Samplers;
 
 namespace openrmf_api_controls
 {
@@ -32,19 +30,14 @@ namespace openrmf_api_controls
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             // Use "OpenTracing.Contrib.NetCore" to automatically generate spans for ASP.NET Core
             services.AddSingleton<ITracer>(serviceProvider =>  
-            {  
-                string serviceName = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;  
-            
+            {
                 ILoggerFactory loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();  
-            
-                ISampler sampler = new ConstSampler(sample: true);  
-            
-                ITracer tracer = new Tracer.Builder(serviceName)  
-                    .WithLoggerFactory(loggerFactory)  
-                    .WithSampler(sampler)  
-                    .Build();  
+                // use the environment variables to setup the Jaeger endpoints
+                var config = Jaeger.Configuration.FromEnv(loggerFactory);
+                var tracer = config.GetTracer();
             
                 GlobalTracer.Register(tracer);  
             
@@ -121,6 +114,10 @@ namespace openrmf_api_controls
                         .AllowCredentials();
                     });
             });
+
+            // add service for allowing caching of responses
+            services.AddResponseCaching();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddXmlSerializerFormatters();
         }
@@ -165,6 +162,10 @@ namespace openrmf_api_controls
             // USE CORS
             // ********************
             app.UseCors("AllowAll");
+
+            // allow response caching directives in the API Controllers
+            app.UseResponseCaching();
+
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
