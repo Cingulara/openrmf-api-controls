@@ -33,8 +33,8 @@ namespace openrmf_api_controls
             
             // Use "OpenTracing.Contrib.NetCore" to automatically generate spans for ASP.NET Core
             services.AddSingleton<ITracer>(serviceProvider =>  
-            {                
-                var loggerFactory = new LoggerFactory();
+            {
+                ILoggerFactory loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();  
                 // use the environment variables to setup the Jaeger endpoints
                 var config = Jaeger.Configuration.FromEnv(loggerFactory);
                 var tracer = config.GetTracer();
@@ -114,6 +114,10 @@ namespace openrmf_api_controls
                         .AllowCredentials();
                     });
             });
+
+            // add service for allowing caching of responses
+            services.AddResponseCaching();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddXmlSerializerFormatters();
         }
@@ -158,6 +162,10 @@ namespace openrmf_api_controls
             // USE CORS
             // ********************
             app.UseCors("AllowAll");
+
+            // allow response caching directives in the API Controllers
+            app.UseResponseCaching();
+
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();

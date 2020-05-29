@@ -36,6 +36,7 @@ namespace openrmf_api_controls.Controllers
         /// <response code="404">If the impact passed is not valid</response>
         [HttpGet]
         [Authorize(Roles = "Administrator,Reader,Editor,Assessor")]
+        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any, VaryByQueryKeys = new [] {"impactlevel", "pii"})]
         public async Task<IActionResult> GetAllControls(string impactlevel = "", bool pii = false)
         {
             try {
@@ -67,6 +68,7 @@ namespace openrmf_api_controls.Controllers
         /// <response code="404">If the impact passed is not valid</response>
         [HttpGet("majorcontrols")]
         [Authorize(Roles = "Administrator,Reader,Editor,Assessor")]
+        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         public async Task<IActionResult> GetAllMajorControls()
         {
             try {
@@ -106,6 +108,7 @@ namespace openrmf_api_controls.Controllers
         /// <response code="404">If the term passed in is not valid</response>
         [HttpGet("{term}")]
         [Authorize(Roles = "Administrator,Reader,Editor,Assessor")]
+        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         public async Task<IActionResult> GetControl(string term)
         {
             _logger.LogInformation("Calling GetControl({0})", term);
