@@ -12,10 +12,17 @@ RUN dotnet build
 RUN dotnet publish -c Release -o out
 
 # build runtime image
-FROM microsoft/dotnet:2.2-aspnetcore-runtime
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
+RUN apt-get update && apt-get -y upgrade && apt-get -y dist-upgrade && apt-get -y install ca-certificates &&  apt-get clean
+
 RUN mkdir /app
 WORKDIR /app
-# RUN apt-get update && apt-get -y install ca-certificates
+COPY --from=build-env /app/out .
 
-COPY --from=build-env /app/out ./
+# Create a group and user
+RUN addgroup --system --gid 1001 openrmfgroup \
+&& adduser --system -u 1001 --ingroup openrmfgroup --shell /bin/sh openrmfuser
+RUN chown openrmfuser:openrmfgroup /app
+
+USER 1001
 ENTRYPOINT ["dotnet", "openrmf-api-controls.dll"]
