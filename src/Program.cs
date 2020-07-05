@@ -2,7 +2,7 @@
 // Licensed under the GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 license. See LICENSE file in the project root for full license information.
 
 using System;
-using Microsoft.AspNetCore;
+using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
@@ -17,7 +17,7 @@ namespace openrmf_api_controls
             try
             {
                 logger.Debug("init main");
-                BuildWebHost(args).Run(); 
+                CreateHostBuilder(args).Build().Run(); 
             }
             catch (Exception ex)
             {
@@ -32,15 +32,21 @@ namespace openrmf_api_controls
             }
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .ConfigureLogging(logging =>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    logging.ClearProviders();
-                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-                })
-                .UseNLog()  // NLog: setup NLog for Dependency injection
-                .Build();
+                    webBuilder.ConfigureKestrel(serverOptions =>
+                    {
+                        // Set properties and call methods on options
+                    })                        
+                    .ConfigureLogging(logging =>
+                    {
+                        logging.ClearProviders();
+                        logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                    })
+                    .UseNLog()  // NLog: setup NLog for Dependency injection
+                    .UseStartup<Startup>();
+                });
     }
 }
