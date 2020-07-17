@@ -158,7 +158,7 @@ namespace openrmf_api_controls
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors();
+            app.UseCors(MyAllowSpecificOrigins);
             // this has to go here
             app.UseAuthentication();
             app.UseAuthorization();
