@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.2-sdk AS build-env
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 RUN mkdir /app
 WORKDIR /app
 
@@ -11,8 +11,8 @@ COPY ./src/ ./
 RUN dotnet build
 RUN dotnet publish -c Release -o out
 
-# build runtime image
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
+# build runtime image with DoD CA Certificates
+FROM cingulara/openrmf-base-api:1.2
 RUN apt-get update && apt-get -y upgrade && apt-get -y dist-upgrade && apt-get -y install ca-certificates &&  apt-get clean
 
 RUN mkdir /app
