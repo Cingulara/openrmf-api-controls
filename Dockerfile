@@ -7,17 +7,21 @@ COPY src/*.csproj ./
 RUN dotnet restore
 
 # copy the rest and build
-COPY ./src/ ./
+COPY src/ ./
 RUN dotnet build
-RUN dotnet publish -c Release -o out
+RUN dotnet publish --runtime alpine-x64 -c Release -o out --self-contained true /p:PublishTrimmed=true
 
 # build runtime image with DoD CA Certificates
-FROM cingulara/openrmf-base-api:1.2
-RUN apt-get update && apt-get -y upgrade && apt-get -y dist-upgrade && apt-get -y install ca-certificates &&  apt-get clean
+FROM cingulara/openrmf-base-api:1.03.00
+RUN apk update && apk upgrade && rm -rf /var/cache/apk/*
 
 RUN mkdir /app
 WORKDIR /app
 COPY --from=build-env /app/out .
+# Fix for broken build on Docker in GH is to put RUN true between multiple COPY statements :(
+RUN true
+COPY src/nlog.config /app/nlog.config
+RUN true
 
 # Create a group and user
 RUN addgroup --system --gid 1001 openrmfgroup \
@@ -25,4 +29,5 @@ RUN addgroup --system --gid 1001 openrmfgroup \
 RUN chown openrmfuser:openrmfgroup /app
 
 USER 1001
-ENTRYPOINT ["dotnet", "openrmf-api-controls.dll"]
+# start the application
+ENTRYPOINT ["./openrmf-api-controls"]
