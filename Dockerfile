@@ -20,7 +20,7 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 # Fix for broken build on Docker in GH is to put RUN true between multiple COPY statements :(
 RUN true
-COPY ./nlog.config /app/nlog.config
+COPY src/nlog.config /app/nlog.config
 RUN true
 
 # Create a group and user
