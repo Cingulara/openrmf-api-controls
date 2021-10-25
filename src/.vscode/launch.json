@@ -32,8 +32,8 @@
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
                 "ASPNETCORE_URLS": "http://*:8094",
-                "JWT-AUTHORITY" : "http://localhost:9001/auth/realms/openrmf",
-                "JWT-CLIENT": "openrmf",
+                "JWTAUTHORITY" : "http://localhost:9001/auth/realms/openrmf",
+                "JWTCLIENT": "openrmf",
                 "NATSSERVERURL": "nats://127.0.0.1:4222"
                 // "JAEGER_AGENT_HOST": "localhost",
                 // "JAEGER_AGENT_PORT": "6831",
