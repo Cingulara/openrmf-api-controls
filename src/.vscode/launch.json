@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/openrmf-api-controls.dll",
+            "program": "${workspaceFolder}/bin/Debug/net6.0/openrmf-api-controls.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
@@ -35,10 +35,6 @@
                 "JWTAUTHORITY" : "http://localhost:9001/auth/realms/openrmf",
                 "JWTCLIENT": "openrmf",
                 "NATSSERVERURL": "nats://127.0.0.1:4222"
-                // "JAEGER_AGENT_HOST": "localhost",
-                // "JAEGER_AGENT_PORT": "6831",
-                // "JAEGER_SERVICE_NAME": "openrmf-api-controls",
-                // "JAEGER_SAMPLER_TYPE": "const"
             }
         },
         {
