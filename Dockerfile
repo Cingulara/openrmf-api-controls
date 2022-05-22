@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 RUN mkdir /app
 WORKDIR /app
 
@@ -31,3 +31,6 @@ RUN chown openrmfuser:openrmfgroup /app
 USER 1001
 # start the application
 ENTRYPOINT ["./openrmf-api-controls"]
+
+LABEL org.opencontainers.image.source https://github.com/Cingulara/openrmf-api-controls
+LABEL maintainer="dale.bingham@cingulara.com"

@@ -26,9 +26,16 @@ namespace openrmf_api_controls.Classes
                 var buffer = new byte[dataLength];
 
                 memoryStream.Position = 0;
+                int gzipBytesRead = 0;
+                int bytesRead = 0;
                 using (var gZipStream = new GZipStream(memoryStream, CompressionMode.Decompress))
                 {
-                    gZipStream.Read(buffer, 0, buffer.Length);
+                    while (gzipBytesRead < buffer.Length)
+                    {
+                        bytesRead = gZipStream.Read(buffer, gzipBytesRead, buffer.Length-gzipBytesRead);
+                        if (bytesRead == 0) break;
+                        gzipBytesRead += bytesRead;
+                    }
                 }
 
                 return Encoding.UTF8.GetString(buffer);
