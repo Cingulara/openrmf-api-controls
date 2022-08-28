@@ -7,7 +7,7 @@
     <ProjectGuid>{6589fd80-18ff-45c9-bf50-f7007fa66bc2}</ProjectGuid>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <Version>1.08.00</Version>
+    <Version>1.08.01</Version>
     <InformationalVersion>This is the OpenRMF OSS Application Controls API from Cingulara</InformationalVersion>
   </PropertyGroup>
 
