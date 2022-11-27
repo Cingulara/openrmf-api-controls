@@ -128,7 +128,7 @@ namespace openrmf_api_controls.Controllers
                 }
             }
             else {
-                _logger.LogWarning("GetControl({0}) term was not sent in the API call");
+                _logger.LogWarning("GetControl() term was not sent in the API call");
                 return BadRequest("No valid control term sent");
             }
         }
