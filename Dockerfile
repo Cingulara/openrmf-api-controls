@@ -12,7 +12,7 @@ RUN dotnet build
 RUN dotnet publish --runtime alpine-x64 -c Release -o out --self-contained true /p:PublishTrimmed=true
 
 # build runtime image with DoD CA Certificates
-FROM cingulara/openrmf-base:1.09.01
+FROM cingulara/openrmf-base:1.09.02
 RUN apk update && apk upgrade && rm -rf /var/cache/apk/*
 
 RUN mkdir /app
