@@ -7,35 +7,34 @@
     <ProjectGuid>{6589fd80-18ff-45c9-bf50-f7007fa66bc2}</ProjectGuid>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <Version>1.10.01</Version>
+    <Version>1.12.00</Version>
     <InformationalVersion>This is the OpenRMF OSS Application Controls API from Cingulara</InformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="jaeger" Version="0.4.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.25" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.25">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.25">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="mongodb.driver" Version="2.19.0" />
-    <PackageReference Include="NLog" Version="4.7.13" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="4.14.0" />
-    <PackageReference Include="OpenTracing.Contrib.NetCore" Version="0.6.2" />
-    <PackageReference Include="prometheus-net.AspNetCore" Version="5.0.2" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4" />
+    <PackageReference Include="mongodb.driver" Version="2.26.0" />
+    <PackageReference Include="NLog" Version="5.3.2" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.11" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.11" />
+    <PackageReference Include="prometheus-net.AspNetCore" Version="6.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageReference Include="NATS.Client" Version="0.10.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
-    <PackageReference Include="System.Net.Http.WinHttpHandler" Version="4.5.4" />
+    <PackageReference Include="System.Net.Http.WinHttpHandler" Version="6.0.1" />
     <PackageReference Include="System.Private.Uri" Version="4.3.2" />
-    <PackageReference Include="System.Text.Encodings.Web" Version="5.0.1" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="6.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
   <ItemGroup>
