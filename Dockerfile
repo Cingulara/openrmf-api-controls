@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 RUN mkdir /app
 WORKDIR /app
 
@@ -9,10 +9,10 @@ RUN dotnet restore
 # copy the rest and build
 COPY src/ ./
 RUN dotnet build
-RUN dotnet publish --runtime alpine-x64 -c Release -o out --self-contained true /p:PublishTrimmed=true
+RUN dotnet publish --runtime linux-musl-x64 -c Release -o out --self-contained true
 
 # build runtime image with DoD CA Certificates
-FROM cingulara/openrmf-base:1.12.00
+FROM cingulara/openrmf-base:1.13.01
 RUN apk update && apk upgrade && rm -rf /var/cache/apk/*
 
 RUN mkdir /app

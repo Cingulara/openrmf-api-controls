@@ -71,7 +71,7 @@ namespace openrmf_api_controls
                     {
                         // Set properties and call methods on options
                         // make the timeout 6 minutes for longer running processes
-                        serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(6);
+                        serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(10);
                     })                
                     .ConfigureLogging(logging =>
                     {
