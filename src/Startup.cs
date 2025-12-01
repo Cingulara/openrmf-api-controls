@@ -2,6 +2,7 @@
 // Licensed under the GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007 license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +15,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Http;
 using Prometheus;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 
 namespace openrmf_api_controls
 {
@@ -30,6 +34,9 @@ namespace openrmf_api_controls
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {           
+            // Configure MongoDB GUID serialization for legacy compatibility
+            BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.CSharpLegacy));
+
             // Register the Swagger generator, defining one or more Swagger documents
             services.AddSwaggerGen(c =>
             {
@@ -44,8 +51,22 @@ namespace openrmf_api_controls
             });
 
             string jwtAuthorityServer = "http://openrmf-keycloak:8080/auth/"; // this is by default the internal keycloak setup
+            List<string> jwtAuthorities = new List<string>();
+
+            foreach(string jwtServer in Environment.GetEnvironmentVariable("JWTAUTHORITY").Split(',')) {
+                if (jwtServer.EndsWith('/'))
+                    jwtAuthorities.Add((jwtServer + "realms/openrmf").Trim().ToLower());
+                else 
+                    jwtAuthorities.Add((jwtServer + "/realms/openrmf").Trim().ToLower());
+            }
+
             if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("JWTINTERNALAUTHORITY"))) {
-                jwtAuthorityServer = Environment.GetEnvironmentVariable("JWTINTERNALAUTHORITY").ToLower();
+                if (Environment.GetEnvironmentVariable("JWTINTERNALAUTHORITY").EndsWith('/')) {
+                    jwtAuthorityServer = Environment.GetEnvironmentVariable("JWTINTERNALAUTHORITY").Trim().ToLower();
+                }
+                else {
+                    jwtAuthorityServer = Environment.GetEnvironmentVariable("JWTINTERNALAUTHORITY").Trim() + "/";
+                }
             }
             // Validate the JWT token sent with the request to make sure it is right
             // use the internal jwtAuthority server so you do not have to go outside the container network
@@ -65,7 +86,7 @@ namespace openrmf_api_controls
                     ValidateAudience = false,
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = true,
-                    ValidIssuer = Environment.GetEnvironmentVariable("JWTAUTHORITY").ToLower(),
+                    ValidIssuers = jwtAuthorities,
                     ValidateLifetime = true
                 };
 
