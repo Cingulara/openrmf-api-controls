@@ -54,19 +54,11 @@ namespace openrmf_api_controls
             List<string> jwtAuthorities = new List<string>();
 
             foreach(string jwtServer in Environment.GetEnvironmentVariable("JWTAUTHORITY").Split(',')) {
-                if (jwtServer.EndsWith('/'))
-                    jwtAuthorities.Add((jwtServer).Trim().ToLower());
-                else 
-                    jwtAuthorities.Add((jwtServer + "/").Trim().ToLower());
+                jwtAuthorities.Add((jwtServer).Trim().ToLower());
             }
 
             if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("JWTINTERNALAUTHORITY"))) {
-                if (Environment.GetEnvironmentVariable("JWTINTERNALAUTHORITY").EndsWith('/')) {
-                    jwtAuthorityServer = Environment.GetEnvironmentVariable("JWTINTERNALAUTHORITY").Trim().ToLower();
-                }
-                else {
-                    jwtAuthorityServer = Environment.GetEnvironmentVariable("JWTINTERNALAUTHORITY").Trim() + "/";
-                }
+                jwtAuthorityServer = Environment.GetEnvironmentVariable("JWTINTERNALAUTHORITY").Trim();
             }
             // Validate the JWT token sent with the request to make sure it is right
             // use the internal jwtAuthority server so you do not have to go outside the container network
@@ -77,7 +69,7 @@ namespace openrmf_api_controls
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(o =>
             {
-                o.Authority = jwtAuthorityServer;
+                o.Authority = jwtAuthorityServer + "realms/openrmf";
                 o.Audience = Environment.GetEnvironmentVariable("JWTCLIENT");
                 o.IncludeErrorDetails = true;
                 o.RequireHttpsMetadata = false;
@@ -98,7 +90,7 @@ namespace openrmf_api_controls
                         c.Response.StatusCode = 401;
                         c.Response.ContentType = "text/plain";
 
-                        Console.WriteLine("openrmf-api-control JWT Error: " + c.Exception.ToString());
+                        Console.WriteLine("openrmf-api-read JWT Error: " + c.Exception.ToString());
 
                         return c.Response.WriteAsync("The JWT validation with the server did not return correctly. Please check with your Application Administrator.");
                     }
