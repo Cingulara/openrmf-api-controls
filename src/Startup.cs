@@ -77,7 +77,7 @@ namespace openrmf_api_controls
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(o =>
             {
-                o.Authority = jwtAuthorityServer + "realms/openrmf";
+                o.Authority = jwtAuthorityServer;
                 o.Audience = Environment.GetEnvironmentVariable("JWTCLIENT");
                 o.IncludeErrorDetails = true;
                 o.RequireHttpsMetadata = false;
