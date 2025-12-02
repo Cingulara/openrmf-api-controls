@@ -55,9 +55,9 @@ namespace openrmf_api_controls
 
             foreach(string jwtServer in Environment.GetEnvironmentVariable("JWTAUTHORITY").Split(',')) {
                 if (jwtServer.EndsWith('/'))
-                    jwtAuthorities.Add((jwtServer + "realms/openrmf").Trim().ToLower());
+                    jwtAuthorities.Add((jwtServer).Trim().ToLower());
                 else 
-                    jwtAuthorities.Add((jwtServer + "/realms/openrmf").Trim().ToLower());
+                    jwtAuthorities.Add((jwtServer + "/").Trim().ToLower());
             }
 
             if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("JWTINTERNALAUTHORITY"))) {
